@@ -1,0 +1,678 @@
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "Master.cshtml";
+}
+@await Html.PartialAsync("slideBar")
+  <!--Main Content Start-->
+  <div class="main-content wf100"> 
+    <!--Slide tabs start-->
+    <div class="slider-tabs wf100">
+      <div class="container">
+        <div class="row">
+          <ul>
+              @{
+                var slideTabb = Model.Value<IEnumerable<IPublishedElement>>("slideTabb");
+                if (slideTabb != null)
+                {
+                   foreach(var item in slideTabb)
+                   {
+                        var numberSeries = item.Value<int>("numberSeries").ToString();
+                        var newsHeadline = item.Value<string>("newsHeadline");
+                        var leagueName =   item.Value<string>("leagueName");
+                        
+                        <li class="col-lg-4">
+                            <div class="slidetab-box">
+                            @{
+                                if (!string.IsNullOrEmpty(numberSeries))
+                                {
+                                    <span>@numberSeries</span>
+                                    if (!string.IsNullOrEmpty(newsHeadline) && !string.IsNullOrEmpty(leagueName))
+                                    {
+                                        <h6><a href="#">@newsHeadline</a></h6>
+                                        <strong>@leagueName</strong>
+                                    }
+                                }
+                            }
+                            </div>
+                        </li>
+                    }
+                }
+              
+              }
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+   
+
+   <div class = "container">
+    <div class = row>
+        <div class="col-lg-4 col-md-5 offset-4">
+            <div class="sidebar">
+               <div class="widget">
+                   <h4>Last Match Result</h4>
+                   <div class="last-match-widget">
+                   @{
+                    var matchResult = Model.Value<IPublishedElement>("displayResult");
+                    
+                    if ( matchResult != null)
+                        {
+                           
+                                var date = DateTime.Parse(matchResult.Value<string>("dateOfNextMatch")).ToString("ddd, MMM d, yyyy ");
+                                var time = DateTime.Parse(matchResult.Value<string>("dateOfNextMatch")).ToString("t");
+                                
+                                
+                                var teamone = matchResult.Value<IPublishedElement>("teamOne");
+                                var teamtwo = matchResult.Value<IPublishedElement>("teamTwo");
+                                
+                                var teamOneScore2 = matchResult.Value<int>("teamOneScore").ToString();
+                                var teamTwoScore2 = matchResult.Value<int>("teamTwoScore").ToString();
+                                
+                                <p> <strong>@Model.Value("leagueName")</strong>@date  |  @time </p>
+                                <ul class="match-teams-vs">
+                               @{
+                                    var countryName = teamone.Value<string>("countryName");
+                                    var countryLogo = teamone.Value<IPublishedContent>("countryLogo");
+                                    
+                                    <li class="team-logo"><img src="@countryLogo.Url()" alt=""> <strong>@countryName</strong> </li>
+                                    <li class="mvs">
+                                        <ul class="mres">
+                                            <li><strong class = "bold">@teamOneScore2</strong></li>
+                                            <li> <span>-</span></li>
+                                            <li> <strong>@teamTwoScore2</strong></li>
+                                        </ul>
+                                    </li>
+                                
+                                
+                                
+                                    var countryName2 = teamtwo.Value<string>("countryName");
+                                    var countryLogo2 = teamtwo.Value<IPublishedContent>("countryLogo");
+                                    
+                                    <li class="team-logo"><img src="@countryLogo2.Url()" alt=""> <strong>@countryName2</strong> </li>
+                                    }
+                                
+                                </ul>
+                            <div class="matchreport"> <a href="#">Match Report</a> </div>
+                            
+                        
+                        }
+                   }
+                    <!--<h4>Last Match Result</h4>-->
+                    <!--<div class="last-match-widget">-->
+                    <!--    <p> <strong>Super Asia Cup</strong> 18 Dec. 2018  |  04:00-07:00 </p>-->
+                    <!--    <ul class="match-teams-vs">-->
+                    <!--       <li class="team-logo"><img src="images/nmf-logo1.png" alt=""> <strong>FC Champs</strong> </li>-->
+                    <!--       <li class="mvs">-->
+                    <!--          <ul class="mres">-->
+                    <!--             <li> <strong>2</strong> <span>L</span> </li>-->
+                    <!--             <li> <strong>3</strong> <span>W</span> </li>-->
+                    <!--          </ul>-->
+                    <!--       </li>-->
+                    <!--       <li class="team-logo"><img src="images/nmf-logo2.png" alt=""> <strong>Tigers</strong> </li>-->
+                    <!--    </ul>-->
+                        <!--<ul class="mp-goals">-->
+                        <!--   <li>-->
+                        <!--      <p>D. Charlie <span>(1 goal)</span></p>-->
+                        <!--      <p>J. Kevin <span>(1 goal)</span></p>-->
+                        <!--   </li>-->
+                        <!--   <li>-->
+                        <!--      <p>Jon T. <span>(1 goal)</span></p>-->
+                        <!--      <p> Steven D. <span>(1 goal)</span></p>-->
+                        <!--      <p> Smith R. <span>(1 goal)</span></p>-->
+                        <!--   </li>-->
+                        <!--</ul>-->
+                    <!--    <div class="matchreport"> <a href="#">Match Report</a> </div>-->
+                    <!--</div>-->
+                    
+                  </div>   
+                </div> 
+            </div>
+        </div> 
+   </div> 
+ </div> 
+  
+ 
+    @{
+        var s = "";
+        
+    }
+    
+    
+    <section class="wf100 p80">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12"> 
+                    <div class="row">
+                    @{
+                        var match3 = Model.Value<IEnumerable<IPublishedElement>>("match3");
+                        if (match3 != null)
+                        {
+                            
+                            List<string> model = new List<string>();
+                            var flag = 0;
+                            
+                           
+                            foreach (var item in match3)
+                            {
+                                var date = DateTime.Parse(item.Value<string>("dateOfNextMatch")).ToString("u");
+                               
+                                if (DateTime.Now < Convert.ToDateTime(date))
+                                { 
+                                    model.Add(date);
+                                    
+                                    flag++;
+                                }
+                                
+                            } 
+                           
+                                if (@model.Count != 0)
+                                {
+                                    var key = "";
+                                    model.Sort();
+                                    
+                                    
+                                    var Count =1;
+                                    
+                                        
+                                        var previousMatch = Model.Value<IEnumerable<IPublishedElement>>("match3");
+                                        if (previousMatch != null)
+                                            {
+                                                foreach (var item2 in previousMatch)
+                                                {
+                                                    var date2 = DateTime.Parse(item2.Value<string>("dateOfNextMatch")).ToString("u");
+                                                    var teamone = item2.Value<IPublishedElement>("teamOne");
+                                                    var teamtwo = item2.Value<IPublishedElement>("teamTwo");
+                                                    var time = DateTime.Parse(item2.Value<string>("dateOfNextMatch")).ToString("t");
+                                                    var venue = item2.Value<string>("venue");
+                                                    var date3 = DateTime.Parse(item2.Value<string>("dateOfNextMatch")).ToString("ddd, MMMM d, yyyy ");
+                                                        s = date2;
+                                                    
+                                                    
+                                                    if (DateTime.Compare(Convert.ToDateTime(model[0]), Convert.ToDateTime(date2)) == 0)
+                                                    {
+                                                                <div class = "col-lg-4 col-md-6">
+                                                                    <div class="next-match-widget">
+                                                                        <h5 class="title">Next Match</h5>
+                                                                        <div class="nmw-wrap">
+                                                                            <ul class="match-teams-vs">
+                                                                            
+                                                                                @{
+                                                                    
+                                                                                var countryName = teamone.Value<string>("countryName");
+                                                                                var countryLogo = teamone.Value<IPublishedContent>("countryLogo");
+                                                                                }
+                                                                                <li class="team-logo"><img src="@countryLogo.Url() " alt=""> <strong>@countryName</strong> </li>
+                                                                                <li class="mvs"> <strong class="vs">VS</strong> </li>
+                                                                            
+                                                                          
+                                                                                @{
+                                                                        
+                                                                                var countryName2 = teamtwo.Value<string>("countryName");
+                                                                                var countryLogo2 = teamtwo.Value<IPublishedContent>("countryLogo");
+                                                                                }
+                                                                            
+                                                                                <li class="team-logo"><img src="@countryLogo2.Url()" alt=""> <strong>@countryName2</strong> </li>
+                                                                            
+                                                                            </ul>
+                                                                            <ul class="nmw-txt">
+                                                                                <li><strong>@Model.Value("leagueName")</strong></li>
+                                                                                <li>@date3</li>
+                                                                                <li>@time</li>
+                                                                                <li><span>@venue</span></li>
+                                                                            </ul>
+                                                                            <table style="width:100%">
+                                                                           		 <tr class = "head">
+                                                                              		<th id="demo"></th>
+                                                                        
+                                                                          			<th id="demo2"></th>
+                                                                        		
+                                                                          			<th id="demo3"></th>
+                                                                                    
+                                                                                    <th id="demo4"></th>
+                                                                                    
+                                                                            	</tr>
+                                                                          		
+                                                                          		<tbody>
+                                                                          		
+                                                                            		<tr class = "head">
+                                                                              			<td>Days</td>
+                                                                             			<td>hours</td>
+                                                                                        <td>Minutes</td>
+                                                                                        <td>Seconds</td>
+                                                                                        
+                                                                            		</tr>
+                                                                            		
+                                                                           		</tbody>
+                                                                           		
+                                                                             </table>
+                                                                
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+        
+                                                                Count = Count +1;
+                                                                break;
+                                                        
+                                                    }
+                                                }
+                                            }
+                            <div class= "col-lg-8">
+                                <div class= "row">
+                                    @for ( var i = 1; i < @model.Count; i++) 
+                                    {
+                                        if (previousMatch != null)
+                                            {
+                                                foreach (var item2 in previousMatch)
+                                                {
+                                                    var date2 = DateTime.Parse(item2.Value<string>("dateOfNextMatch")).ToString("u");
+                                                    var teamone = item2.Value<IPublishedElement>("teamOne");
+                                                    var teamtwo = item2.Value<IPublishedElement>("teamTwo");
+                                                    var time = DateTime.Parse(item2.Value<string>("dateOfNextMatch")).ToString("t");
+                                                    var venue = item2.Value<string>("venue");
+                                                    var date3 = DateTime.Parse(item2.Value<string>("dateOfNextMatch")).ToString("ddd, MMMM d, yyyy ");
+                                                    
+                                                    
+                                                     if (DateTime.Compare(Convert.ToDateTime(model[i]), Convert.ToDateTime(date2)) == 0)
+                                                     {
+                                                    
+                                                        <div class="col-lg-6 mb-3">
+                                                            <div class="next-match-fixtures">
+                                                                <ul class="match-teams-vs">
+                                                                    
+                                                                      @{  var countryname = teamone.Value<string>("countryName");
+                                                                        var countrylogo = teamone.Value<IPublishedContent>("countryLogo");
+                                                            
+                                                            
+                                                                        if(!string.IsNullOrEmpty(countryname))
+                                                        
+                                                                        {
+                                                        
+                                                                        <li class="team-logo"><img src="@countrylogo.Url()" alt=""> <strong>@countryname</strong></li>
+                                                        
+                                                                        }
+                                                    
+                                                                    }
+                                                      
+                                                        
+                                                        
+                                                                     <li class="mvs">
+                                                                        <p> <strong>@Model.Value("leagueName")</strong> @date3
+                                                                         @time </p>
+                                                                        <strong class="vs">VS</strong>
+                                                                    </li>
+                                                          
+                                                                   @{
+                                                                        var countryname2 = teamtwo.Value<string>("countryName");
+                                                                        var countrylogo2 = teamtwo.Value<IPublishedContent>("countryLogo");
+                                                                
+                                                                        if(!string.IsNullOrEmpty(countryname2))
+                                                        
+                                                                        {
+                                                        
+                                                                            <li class="team-logo"><img src="@countrylogo2.Url()" alt=""> <strong>@countryname2</strong></li>
+                                                        
+                                                                        }
+                                                                    }
+                                                                    
+                                                                </ul>
+                                                      
+                                                                <ul class="nmf-loc">
+                                                                    <li><i class="fas fa-location-arrow"></i>@venue</li>
+                                                                </ul>
+                                                            </div> 
+                                                        </div> 
+                                            
+                                         
+                                                    }
+                                                        
+                                                }
+                                
+                                            }
+                                        }
+                                    </div>
+                                </div>    
+                                
+                                 
+                            }
+                        
+                           
+                                     
+                    }
+                                
+                               
+                                
+                }
+        
+        </div>
+    </div>
+                
+                
+                <div class="col-lg-12">
+                    <div class = "row">
+                     @{
+                        
+                        var group = Model.Value<IEnumerable<IPublishedContent>>("Group");
+                        
+                        var matchResult2 = Model.Value<IEnumerable<IPublishedElement>>("matchResult");
+                        
+                       
+                       
+                        var difference= 0;
+                        
+                        //List for storing fixtures result
+                        List<string> country_name = new List<string>();
+                        
+                        List<List<int>> list = new List<List<int>>();
+                        
+                        foreach( var country_group in group)
+                        {
+                        
+                            foreach( var country in country_group.Children())
+                            {
+                                var name_country = country.Value<string>("countryName");
+                                country_name.Add(@name_country);
+                            
+                            }
+                        
+                        }
+                        
+                        for( var l_country = 0; l_country < @country_name.Count;l_country++)
+                        {
+                            List<int> sublist = new List<int>();
+                        
+                            for( var i = 0; i < 8; i++)
+                            {
+                                sublist.Add(0);
+                            
+                            }
+                            list.Add(sublist);
+                        
+                        }
+                        
+                       
+                                    
+                        
+                        
+                        if ( matchResult2 != null)
+                        {
+                            foreach( var fix in matchResult2)
+                            {
+                              
+                                var teamone = fix.Value<IPublishedElement>("teamOne");
+                                var teamtwo = fix.Value<IPublishedElement>("teamTwo");
+                                
+                                
+                                     var Countryname = teamone.Value<string>("countryName");
+                                
+                                
+                                    var Countryname2 = teamtwo.Value<string>("countryName");
+                                     
+                                var teamOneScore = fix.Value<int>("teamOneScore").ToString();
+                                var teamTwoScore = fix.Value<int>("teamTwoScore").ToString();
+                            
+                         
+                        
+                        
+                        
+                                @*if (group != null)
+                                {
+                                    foreach (var item in group)
+                                    {
+                                
+                                        var subgroupname = item.Value<string>("teamX");
+                                
+                                
+                                        int x = 0;
+                                        var count = 1;
+                                        <div class="col-lg-6 mb-3">
+                                        <div class="point-table-widget">
+                                        <table>
+                                        <thead>
+                                          <tr>
+                                            <th></th>
+                                            <th>@subgroupname</th>
+                                            <th>w</th>
+                                            <th>d</th>
+                                            <th>l</th>
+                                            <th>gf</th>
+                                            <th>ga</th>
+                                            <th>gd</th>
+                                            <th>pts</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                       
+                                            
+                                        @foreach(var child in item.Children())
+                                        {
+                                            var name = child.Value<string>("countryName");*@
+                                               
+                                                
+                                                  @*<tr>
+                                                    <td>@count</td>
+                                                    <td><img src="@countryImage.Url()" alt=""><strong>@name</strong></td>*@
+                                               
+                                            foreach( var name in  country_name)
+                                            {
+                                            
+                                                
+                                                if (@name == @Countryname || @name == @Countryname2)
+                                                {
+                                                   
+                                                        if (Convert.ToInt32(@teamOneScore) > Convert.ToInt32(@teamTwoScore ))
+                                                        {
+                                                        
+                                                            
+                                                            if( @name == @Countryname)
+                                                            {
+                                                               
+                                                                
+                                                                    var index = country_name.IndexOf(@Countryname);
+                                                                    
+                                                                    list[@index][0] += 1;
+                                                                    list[@index][1] += 1;
+                                                                    list[@index][4] += Convert.ToInt32(@teamOneScore);
+                                                                    list[@index][5] += Convert.ToInt32(@teamTwoScore);
+                                                                    list[@index][6] += Convert.ToInt32(@teamOneScore)-Convert.ToInt32(@teamTwoScore);
+                                                                    list[@index][7] += 3;
+                                                                    
+                                                                    
+                                                                    
+                                                                
+                                                            }
+                                                            else if (@name == @Countryname2)
+                                                            {
+                                                                var index = country_name.IndexOf(@Countryname2);
+                                                                    
+                                                                list[@index][0] += 1;
+                                                                list[@index][3] += 1;
+                                                                list[@index][4] += Convert.ToInt32(@teamTwoScore);
+                                                                list[@index][5] += Convert.ToInt32(@teamOneScore);
+                                                                list[@index][6] += Convert.ToInt32(@teamTwoScore)-Convert.ToInt32(@teamOneScore);
+                                                                
+                                                                
+                                                            }
+                                                        }
+                                                        else if(Convert.ToInt32(@teamOneScore) < Convert.ToInt32(@teamTwoScore ) )
+                                                        {
+                                                            
+                                                            if( @name == @Countryname2)
+                                                            {
+                                                                var index = country_name.IndexOf(@Countryname2);
+                                                                    
+                                                                list[@index][0] += 1;
+                                                                list[@index][1] += 1;
+                                                                list[@index][4] += Convert.ToInt32(@teamTwoScore);
+                                                                list[@index][5] += Convert.ToInt32(@teamOneScore);
+                                                                list[@index][6] += Convert.ToInt32(@teamTwoScore)-Convert.ToInt32(@teamOneScore);
+                                                                list[@index][7] += 3;
+                                                            }
+                                                        
+                                                            else if (@name == @Countryname)
+                                                            {
+                                                               var index = country_name.IndexOf(@Countryname);
+                                                                    
+                                                                list[@index][0] += 1;
+                                                                list[@index][3] += 1;
+                                                                list[@index][4] += Convert.ToInt32(@teamOneScore);
+                                                                list[@index][5] += Convert.ToInt32(@teamTwoScore);
+                                                                list[@index][6] += Convert.ToInt32(@teamOneScore)-Convert.ToInt32(@teamTwoScore);
+                                                                
+                                                            }
+                                                        
+                                                        }
+                                                        else if ( Convert.ToInt32(@teamOneScore) == Convert.ToInt32(@teamTwoScore))
+                                                        {
+                                                            if (@name == @Countryname)
+                                                            {
+                                                                var index = country_name.IndexOf(@Countryname);
+                                                                    
+                                                                list[@index][0] += 1;
+                                                                list[@index][2] += 1;
+                                                                list[@index][4] += Convert.ToInt32(@teamOneScore);
+                                                                list[@index][5] += Convert.ToInt32(@teamTwoScore);
+                                                                list[@index][6] += Convert.ToInt32(@teamOneScore)-Convert.ToInt32(@teamTwoScore);
+                                                                list[@index][7] += 1;
+                                                            
+                                                            }
+                                                            if (@name == @Countryname2)
+                                                            {
+                                                                    
+                                                               var index = country_name.IndexOf(@Countryname2);
+                                                                    
+                                                                list[@index][0] += 1;
+                                                                list[@index][2] += 1;
+                                                                list[@index][4] += Convert.ToInt32(@teamTwoScore);
+                                                                list[@index][5] += Convert.ToInt32(@teamOneScore);
+                                                                list[@index][6] += Convert.ToInt32(@teamTwoScore)-Convert.ToInt32(@teamOneScore);
+                                                                list[@index][7] += 1;
+                                                                
+                                                                
+                                                            }
+                                                        
+                                                            
+                                                        }
+                                                        
+                                                }
+                                        
+                                            }
+                                            
+                                        }
+                                    }
+                                    
+                                    
+                                   
+                                if (group != null)
+                                {
+                                    int x = 0; 
+                                    foreach (var item in group)
+                                    {
+                                
+                                        var subgroupname = item.Value<string>("teamX");
+                                
+                                
+                                        
+                                        var count = 1;
+                                        <div class="col-lg-6 mb-3">
+                                        <div class="point-table-widget">
+                                        <table>
+                                        <thead>
+                                          <tr>
+                                            <th></th>
+                                            <th>@subgroupname</th>
+                                            <th>mp</th>
+                                            <th>w</th>
+                                            <th>d</th>
+                                            <th>l</th>
+                                            <th>gf</th>
+                                            <th>ga</th>
+                                            <th>gd</th>
+                                            <th>pts</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                       
+                                            
+                                        @foreach(var child in item.Children())
+                                        {
+                                            var name = child.Value<string>("countryName");
+                                            var countryImage = child.Value<IPublishedContent>("countryLogo");
+                                            <tr>
+                                            <td>@count</td>
+                                            <td><img src="@countryImage.Url()" alt=""><strong>@name</strong></td>
+                                            @for(int y = 0; y < 8; y++)
+                                            {
+                                                if( y == 7)
+                                                {
+                                                    <td><strong>@list[@x][@y]<strong></td>
+                                                }
+                                                else
+                                                {
+                                                <td>@list[@x][@y]</td>          
+                                                }
+                                            }
+                                            </tr>       
+                                            x = x +1;
+                                           
+                                            count = count+1;
+                                        } 
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    }  
+                          
+                }
+                                
+                        
+                        
+                     
+                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<script>
+// Set the date we're counting down to
+var countDownDate = new Date("@s").getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+  var addMlSeconds = 5 * 60 * 60 * 1000 + 45 * 60 * 1000;
+  var time = now + addMlSeconds;
+  
+  // Find the distance between now and the count down date
+  var distance = countDownDate - time;
+  
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "";
+  }
+  else{
+    
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+  // Output the result in an element with id="demo"
+  document.getElementById("demo").innerHTML = days ;
+  document.getElementById("demo2").innerHTML = hours ;
+  document.getElementById("demo3").innerHTML = minutes ;
+   document.getElementById("demo4").innerHTML = seconds ;
+    }
+  // If the count down is over, write some text 
+  
+}, 1000);
+</script>   
+</div>
+<!--Main Content End--> 
