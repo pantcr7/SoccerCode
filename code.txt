@@ -4,6 +4,7 @@
 	Layout = "Master.cshtml";
 }
 @await Html.PartialAsync("slideBar")
+//start main code here
   <!--Main Content Start-->
   <div class="main-content wf100"> 
     <!--Slide tabs start-->
